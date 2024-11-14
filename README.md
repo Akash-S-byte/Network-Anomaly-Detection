@@ -15,22 +15,27 @@ F1 Score: Balances precision and recall, crucial for evaluating the model’s pe
 For unsupervised methods, Anomaly Detection Rate and False Positive Rate are also monitored.
 
 Project Workflow
+
 Step 1: Exploratory Data Analysis (EDA)
 Distribution Analysis: Key features like protocoltype, service, flag, and attack were examined for common values and distribution patterns.
 Correlation Analysis: Identified high correlation features, such as srcbytes and dstbytes, to understand relationships between traffic flow volumes and anomalies.
 Visualization: Histograms, box plots, and scatter plots helped identify patterns, such as high serrorrate in certain traffic and elevated srcbytes in attacks.
+
 Step 2: Hypothesis Testing
 Several hypotheses were tested to guide feature engineering:
 
 Traffic Type Hypothesis: Traffic with unusual serrorrate and rerrorrate may indicate attacks (e.g., SYN floods).
 Access Frequency Hypothesis: High values in count and srvcount indicate repeated access to services, potentially signaling probes or brute-force attempts.
 Login Patterns: Features like numfailedlogins and isguestlogin were analyzed for anomalous login activity.
+
 Step 3: Feature Engineering
 Encoding Categorical Variables: Used OneHotEncoding and frequency encoding for protocoltype, service, and flag to retain categorical relationships.
 Derived Features: Added session-level aggregates like total bytes transferred and calculated error rates for improved granularity in anomaly detection.
+
 Step 4: Modeling
 Logistic Regression served as a baseline model to provide initial insights.
 Random Forest was employed for its ability to handle non-linear patterns in the data and yielded higher accuracy and robustness in detecting anomalies.
+
 Step 5: Evaluation and Insights
 Model Performance:
 The Random Forest model achieved high accuracy and an F1 score, indicating a strong capability in distinguishing normal traffic from anomalies.
@@ -39,13 +44,16 @@ Insights and Recommendations
 Traffic Patterns: The predominant protocols were TCP and HTTP. Frequent service access patterns indicate that more robust security for these protocols could reduce vulnerability.
 Error Rates: High serrorrate and rerrorrate are strong indicators of potential anomalies, especially during DDoS or probe attacks.
 User Behavior: Observations showed that accounts with frequent login failures are often flagged as anomalies, suggesting potential brute-force attacks.
+
 Recommendations:
 Enhanced Monitoring: Focus on high-risk protocols and services. Monitoring sessions with high serrorrate and rerrorrate could reduce false negatives.
 Hybrid Model Approach: Combining unsupervised methods with supervised models can improve detection of new attack types.
 Continuous Training: Retrain the model regularly to adapt to emerging attack patterns, ensuring it remains effective against evolving threats.
+
 Deployment Steps
 Model Saving: The trained Random Forest model and encoders (OneHotEncoder for categorical variables and LabelEncoder for labels) were saved as .pkl files.
 Flask API: A Flask application was created to serve the model in real-time, accepting JSON input and returning predictions.
+
 Environment Setup:
 Created a requirements.txt file to handle dependencies.
 Set up a virtual environment, installing Flask, scikit-learn, and other dependencies.
